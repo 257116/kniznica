@@ -15,6 +15,9 @@ public class Main {
             System.out.println("3. Delete a book");
             System.out.println("5. List books");
             System.out.println("6. Enter title of the book to search for: ");
+            System.out.println("8. Mark book as free");
+            System.out.println("9. Mark book as notfree");
+
             System.out.println("4. Exit");
             System.out.print("Choose an option: ");
             int option = scanner.nextInt();
@@ -39,12 +42,35 @@ public class Main {
                     String title = scanner.nextLine();
                     searchBook(title);
                     break;
+                case 8:
+                    markBook(scanner, true);
+                    break;
+                case 9:
+                    markBook(scanner, false);
+                    break;
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
         }
     }
 
+    
+    private static void markBook(Scanner scanner, boolean isBorrowed) {
+        System.out.print("enter the title of the book to mark as " + (isBorrowed ? "borrowed" : "returned") + ": ");
+        String title = scanner.nextLine();
+
+        for (int i = 0; i < bookList.size(); i++) {
+            if (bookList.get(i).getTitle().equalsIgnoreCase(title)) {
+                bookList.get(i).setAvailable(!isBorrowed);
+                System.out.println("the book has been marked as " + (isBorrowed ? "borrowed" : "returned") + " successfully!");
+                return;
+            }
+        }
+
+        System.out.println("The book was not found.");
+    }
+    
+    
     private static void addBook(Scanner scanner) {
         System.out.print("enter book title: ");
         String title = scanner.next();
