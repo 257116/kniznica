@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,6 +13,8 @@ public class Main {
             System.out.println("1. Add a new book");
             System.out.println("2. Edit a book");
             System.out.println("3. Delete a book");
+            System.out.println("5. List books");
+            System.out.println("6. Enter title of the book to search for: ");
             System.out.println("4. Exit");
             System.out.print("Choose an option: ");
             int option = scanner.nextInt();
@@ -28,6 +31,13 @@ public class Main {
                     break;
                 case 4:
                     System.exit(0);
+                    break;
+                case 5:
+                    listBooks();
+                    break;
+                case 6:
+                    String title = scanner.nextLine();
+                    searchBook(title);
                     break;
                 default:
                     System.out.println("Invalid option. Please try again.");
@@ -96,6 +106,42 @@ public class Main {
         }
 
             System.out.println("Book not found!");
+    }
+    private static void listBooks() {
+        bookList.sort(Comparator.comparing(book -> book.getTitle().toLowerCase()));
+        System.out.println("List of books:");
+        for (Book book : bookList) {
+            System.out.println(book.getTitle() + " by " + String.join(", ", book.getAuthors()) +
+                    ", published in " + book.getYearOfPublication() +
+                    ", availability status: " + (book.isAvailable() ? "available" : "borrowed"));
+            if (book instanceof Novel) {
+                Novel novel = (Novel) book;
+                System.out.println("Genre: " + novel.getGenre());
+            } else if (book instanceof Textbook) {
+                Textbook textbook = (Textbook) book;
+                System.out.println("Suitable for grade: " + textbook.getGrade());
+            }
+            System.out.println("-----------------------------------");
+        }
+    }
+    
+    private static void searchBook(String title) {
+        for (Book book : bookList) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                System.out.println(book.getTitle() + " by " + String.join(", ", book.getAuthors()) +
+                        ", published in " + book.getYearOfPublication() +
+                        ", availability status: " + (book.isAvailable() ? "available" : "borrowed"));
+                if (book instanceof Novel) {
+                    Novel novel = (Novel) book;
+                    System.out.println("Genre: " + novel.getGenre());
+                } else if (book instanceof Textbook) {
+                    Textbook textbook = (Textbook) book;
+                    System.out.println("Suitable for grade: " + textbook.getGrade());
+                }
+                return;
+            }
+        }
+        System.out.println("Book not found.");
     }
     
 }
